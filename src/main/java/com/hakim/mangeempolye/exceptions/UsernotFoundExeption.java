@@ -1,4 +1,4 @@
-package com.hakim.mangeempolye.expeptions;
+package com.hakim.mangeempolye.exceptions;
 
 public class UsernotFoundExeption extends RuntimeException{
 
