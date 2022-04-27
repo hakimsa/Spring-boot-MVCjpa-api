@@ -7,8 +7,10 @@ import com.hakim.mangeempolye.domain.Role;
 import com.hakim.mangeempolye.domain.UserApp;
 import com.hakim.mangeempolye.services.UserService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 private final  UserService userService;
 
-@GetMapping("/api/v1/all/users")
+@GetMapping("/api/v1/all")
 public ResponseEntity<List<UserApp>> getUsers(){
     return ResponseEntity.ok().body(userService.getUsers());    
 }
@@ -41,6 +43,12 @@ public ResponseEntity<UserApp> saveUser(@RequestBody UserApp user){
 
     
 }
+
+@GetMapping("/api/v1/find/{id}")
+public ResponseEntity <UserApp> getUserById(@PathVariable("id")Long id){
+    UserApp employee=userService.getUser(id);
+   return new ResponseEntity<>(employee,HttpStatus.OK);
+} 
 @PostMapping("/role/api/v1/save")
 public ResponseEntity<Role> saveUser(@RequestBody Role role){
     URI uri= URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("users/role/api/v1/save").toUriString());

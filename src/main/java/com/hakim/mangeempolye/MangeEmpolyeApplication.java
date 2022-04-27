@@ -1,7 +1,6 @@
 package com.hakim.mangeempolye;
 
 import java.util.ArrayList;
-
 import com.hakim.mangeempolye.domain.Role;
 import com.hakim.mangeempolye.domain.UserApp;
 import com.hakim.mangeempolye.services.UserService;

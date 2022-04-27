@@ -1,12 +1,7 @@
 package com.hakim.mangeempolye.controllers.employeeResoures;
-
 import java.util.List;
-
-import com.hakim.mangeempolye.domain.UserApp;
 import com.hakim.mangeempolye.models.Employee;
 import com.hakim.mangeempolye.services.EmployeeService;
-import com.hakim.mangeempolye.services.UserService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*",allowedHeaders ="*")
 @RequestMapping("/employee")
 public class EmployeeResource {
 

@@ -14,7 +14,7 @@
 	<name>mange-empolye</name>
 	<description>App for mangement employe and users -demos concept</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -60,6 +60,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+		
 		</plugins>
 	</build>
 

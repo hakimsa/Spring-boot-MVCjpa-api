@@ -34,11 +34,6 @@ public class UserServiceImplemnts implements UserService{
     }
 
 
-    @Override
-    public UserApp getUser(String username) {
-        // TODO Auto-generated method stub
-        return userRep.findByName(username);
-    }
 
     @Override
     public List<UserApp> getUsers() {
@@ -61,6 +56,10 @@ public class UserServiceImplemnts implements UserService{
         return roleRepo.findAll();
     }
 
-   
+    @Override
+    public UserApp getUser(Long id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
 }
