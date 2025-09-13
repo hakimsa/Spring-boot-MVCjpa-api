@@ -16,17 +16,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      mysql:
-        image: mysql:8.0
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
         env:
-          MYSQL_ROOT_PASSWORD: HSrd82AB**
-          MYSQL_DATABASE: em_db
-          MYSQL_USER: sa
-          MYSQL_PASSWORD: HSrd82AB**
+          ACCEPT_EULA: Y
+          SA_PASSWORD: HSrd82AB**
+          MSSQL_PID: Developer
+          MSSQL_DB: em_db
         ports:
-          - "1433:1433" 
+          - "1433:1433"  # Puerto para SQL Server
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="sqlcmd -U sa -P 'HSrd82AB**' -Q 'SELECT 1'"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
