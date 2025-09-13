@@ -23,7 +23,16 @@ public class Employee implements Serializable{
     private String imageUrl;
    // @Column(nullable = false,updatable = false)
     private String employeeCode;
-  
+    private boolean active;  // Asegúrate de que esta propiedad esté presente
+
+    // Getters y setters
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
     private String dateContract;
     public Employee(Long id, String name, String email, String jobTitle, String phone, String imageUrl,
             String employeeCode, String dateContract) {
