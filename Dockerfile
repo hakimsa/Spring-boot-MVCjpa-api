@@ -26,7 +26,7 @@ FROM dependencies AS build
 COPY src src
 
 # Build application
-RUN ./mvnw clean package -DskipTests -B && \
+RUN ./mvnw clean package -DskipTests=true -B && \
     mkdir -p target/dependency && \
     (cd target/dependency; jar -xf ../*.jar)
 
