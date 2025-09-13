@@ -1,0 +1,25 @@
+# chaos/chaos-monkey.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chaosmonkey
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chaosmonkey
+  template:
+    metadata:
+      labels:
+        app: chaosmonkey
+    spec:
+      containers:
+      - name: chaosmonkey
+        image: quay.io/linki/chaosmonkey:v0.21.0
+        env:
+        - name: CHAOSMONKEY_SCHEDULE_ENABLED
+          value: "true"
+        - name: CHAOSMONKEY_ASSAULTS_LATENCY_ACTIVE
+          value: "true"
+        - name: CHAOSMONKEY_ASSAULTS_EXCEPTIONS_ACTIVE
+          value: "true"

@@ -35,6 +35,10 @@ public class EmployeeService {
    return employeeRepo.getById(id);
 
     }
+    public double getActiveEmployeeCount() {
+    return employeeRepo.countByActive(true);
+}
+
 
     public void deleteEmploye(Long id){
    employeeRepo.deleteEmployeeById(id);

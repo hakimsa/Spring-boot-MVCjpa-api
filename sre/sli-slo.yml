@@ -1,0 +1,35 @@
+# sre/sli-slo.yml
+apiVersion: sloth.slok.dev/v1
+kind: PrometheusServiceLevel
+metadata:
+  name: employee-app-sli
+spec:
+  service: "employee-app"
+  labels:
+    team: "backend"
+  slos:
+    - name: "requests-availability"
+      objective: 99.9
+      description: "99.9% of requests should be successful"
+      sli:
+        events:
+          errorQuery: sum(rate(http_requests_total{job="employee-app",code=~"5.."}[5m]))
+          totalQuery: sum(rate(http_requests_total{job="employee-app"}[5m]))
+      alerting:
+        name: EmployeeAppHighErrorRate
+        labels:
+          severity: critical
+        pageAlert:
+          labels:
+            severity: critical
+        ticketAlert:
+          labels:
+            severity: warning
+
+    - name: "requests-latency"
+      objective: 99.0
+      description: "99% of requests should be faster than 500ms"
+      sli:
+        events:
+          errorQuery: sum(rate(http_request_duration_seconds_bucket{job="employee-app",le="0.5"}[5m]))
+          totalQuery: sum(rate(http_request_duration_seconds_count{job="employee-app"}[5m]))
