@@ -19,10 +19,10 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: rootpass
-          MYSQL_DATABASE: testdb
-          MYSQL_USER: testuser
-          MYSQL_PASSWORD: testpass
+          MYSQL_ROOT_PASSWORD: HSrd82AB**
+          MYSQL_DATABASE: em_db
+          MYSQL_USER: sa
+          MYSQL_PASSWORD: HSrd82AB**
         ports:
           - 3306:3306
         options: >-
