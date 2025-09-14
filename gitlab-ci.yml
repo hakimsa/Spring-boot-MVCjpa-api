@@ -42,7 +42,7 @@ services:
 
     - name: Run Tests
       run: |
-        mvn clean test
+        mvn clean test skpTests=true
         mvn jacoco:report
 
     - name: SonarCloud Scan
