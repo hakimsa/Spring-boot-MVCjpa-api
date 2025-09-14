@@ -15,21 +15,21 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: HSrd82AB**
-          MSSQL_PID: Developer
-          MSSQL_DB: em_db
-        ports:
-          - "1433:1433"  # Puerto para SQL Server
-        options: >-
-          --health-cmd="sqlcmd -U sa -P 'HSrd82AB**' -Q 'SELECT 1'"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+services:
+  postgres:
+    image: postgres:15
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: em_db
+    ports:
+      - "5432:5432"  # Puerto para PostgreSQL
+    options: >-
+      --health-cmd="pg_isready -U postgres -d em_db"
+      --health-interval=10s
+      --health-timeout=5s
+      --health-retries=5
+
 
     steps:
     - uses: actions/checkout@v4
