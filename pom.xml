@@ -55,21 +55,46 @@
     <version>10.2.0.jre8</version> <!-- Asegúrate de usar la versión correcta -->
 </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
-            <scope>provided</scope>
-        </dependency>
+         <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.30</version> <!-- o 1.18.28+ -->
+        <scope>provided</scope>
+    </dependency>
    <dependency>
      <groupId>org.hsqldb</groupId>
      <artifactId>hsqldb</artifactId>
      <version>2.5.0</version>
    </dependency>
+   <dependency>
+  <groupId>org.postgresql</groupId>
+  <artifactId>postgresql</artifactId>
+  <version>42.7.3</version> <!-- use latest stable -->
+</dependency>
+
  </dependencies>
 
 	<build>
 		<plugins>
+		 <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+            <configuration>
+                <source>17</source>
+                <target>17</target>
+                <compilerArgs>
+                    <arg>--add-opens</arg>
+                    <arg>jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+                    <arg>--add-opens</arg>
+                    <arg>jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+                    <arg>--add-opens</arg>
+                    <arg>jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+                    <arg>--add-opens</arg>
+                    <arg>jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+                </compilerArgs>
+            </configuration>
+        </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

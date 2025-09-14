@@ -5,7 +5,9 @@ import java.util.List;
 import com.hakim.mangeempolye.models.Employee;
 import com.hakim.mangeempolye.repo.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class EmployeeService {
@@ -30,11 +32,17 @@ public class EmployeeService {
         return employeeRepo.findAll();
     }
 
-    public Employee findEmployeeById(Long id){
-   
-   return employeeRepo.getById(id);
 
+
+    public Employee findEmployeeById(Long id) {
+        return employeeRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Employee with id " + id + " not found"
+                ));
     }
+
+
+
     public double getActiveEmployeeCount() {
     return employeeRepo.countByActive(true);
 }
