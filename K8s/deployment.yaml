@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-mvc-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-mvc-api
+  template:
+    metadata:
+      labels:
+        app: spring-mvc-api
+    spec:
+      containers:
+      - name: spring-mvc-api
+        image: hakimsa/spring-mvc-api:latest
+        ports:
+        - containerPort: 8080

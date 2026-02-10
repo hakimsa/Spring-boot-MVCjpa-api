@@ -1,26 +1,23 @@
-# Etapa 1: compilar con Maven
-FROM maven:3.8.6-openjdk-11 AS builder
-
+# Etapa 1: build con Maven
+FROM maven:3.9.2-eclipse-temurin-11 AS builder
 WORKDIR /app
 
-# Copiar pom.xml y descargar dependencias (cachea para builds futuros)
+# Copiar pom.xml y src
 COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Copiar el código y compilar
 COPY src ./src
+
+# Build del jar
 RUN mvn clean package -DskipTests
 
-# Etapa 2: imagen ligera con JDK/JRE
-FROM openjdk:11-jdk-slim
-
+# Etapa 2: imagen final ligera con JRE
+FROM eclipse-temurin:11-jre-jammy
 WORKDIR /app
 
-# Copiar el JAR desde la etapa anterior
+# Copiar el jar desde la etapa anterior
 COPY --from=builder /app/target/*.jar app.jar
 
-# Puerto expuesto (ajusta si tu app usa otro)
-EXPOSE 8089
+# Puerto expuesto
+EXPOSE 8080
 
-# Comando para arrancar la app
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Comando de arranque
+ENTRYPOINT ["java","-jar","app.jar"]
