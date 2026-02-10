@@ -1,5 +1,6 @@
 # Etapa 1: compilar con Maven
-FROM maven:3.8.6-openjdk-11 AS builder
+
+FROM maven:3.9.2-eclipse-temurin-11 AS build
 
 WORKDIR /app
 
@@ -12,7 +13,8 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: imagen ligera con JDK/JRE
-FROM openjdk:11-jdk-slim
+FROM eclipse-temurin:11-jdk-jammy
+
 
 WORKDIR /app
 
