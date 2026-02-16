@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/employee/api/v1/add").permitAll()
         .anyRequest().permitAll()
         .antMatchers("/employee/api/v1/all").permitAll()  // <--- agregado
-        .antMatchers("/actuator/health").permitAll()
-        .anyRequest().authenticated();
+        .antMatchers("/actuator/health").permitAll();
+      
     }
 }
