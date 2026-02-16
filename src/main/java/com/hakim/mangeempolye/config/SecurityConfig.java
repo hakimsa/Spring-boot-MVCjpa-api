@@ -11,17 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            
+ @Override
+protected void configure(HttpSecurity http) throws Exception {
+    http
         .cors().and()
         .csrf().disable()
         .authorizeRequests()
         .antMatchers("/employee/api/v1/add").permitAll()
-        .anyRequest().permitAll()
-        .antMatchers("/employee/api/v1/all").permitAll()  // <--- agregado
-        .antMatchers("/actuator/health").permitAll();
-      
-    }
+        .antMatchers("/employee/api/v1/all").permitAll()
+        .antMatchers("/employee/api/v1/find/**").permitAll()
+        .antMatchers("/actuator/health").permitAll()
+        .anyRequest().permitAll(); // ← SIEMPRE EL ÚLTIMO
+}
 }
