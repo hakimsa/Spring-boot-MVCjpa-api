@@ -3,35 +3,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        ports:
-          - 5432:5432
-
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
 
-      - name: Build & Test with Maven
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/${{ secrets.DB_NAME }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USER }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: mvn clean package -Dmaven.test.skip=true 
+      - name: Build & Test
+        run: mvn clean package -Dmaven.test.skip=false
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - uses: actions/checkout@v3
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -39,7 +30,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build & Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -48,16 +39,41 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:${{ github.sha }}
 
-      - name: Validate Meraki Network Existss
+  argo-sync:
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Trigger ArgoCD Deploy
         run: |
-          RESPONSE=$(curl -s -L \
+          argocd app sync mgtapp --auth-token ${{ secrets.ARGOCD_TOKEN }}
+
+  meraki-check:
+    runs-on: ubuntu-latest
+    needs: argo-sync
+    steps:
+      - name: Validate Meraki Network Exists
+        run: |
+          COUNT=$(curl -s -L \
             -H "X-Cisco-Meraki-API-Key: $MERAKI_API_KEY" \
             -H "Content-Type: application/json" \
             -X GET \
-            "https://api.meraki.com/api/v1/organizations/1749173/networks")
+            "https://api.meraki.com/api/v1/organizations/1749173/networks" \
+            | jq '[.[] | select(.name=="lab-test")] | length')
 
-          echo "$RESPONSE"
-
-          echo "$RESPONSE" | grep "lab-test" || (echo "Network not found!" && exit 1)
+          if [ "$COUNT" -eq 0 ]; then
+            echo "❌ Network lab-test not found!"
+            exit 1
+          fi
+          echo "✅ Network lab-test exists!"
         env:
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    needs: meraki-check
+    steps:
+      - name: Run Smoke Tests
+        run: |
+          ./scripts/smoke_test.sh
