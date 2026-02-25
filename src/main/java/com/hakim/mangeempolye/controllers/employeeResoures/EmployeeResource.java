@@ -41,10 +41,14 @@ public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
     Employee newEmployee=employeeService.addEmployee(employee);
     return new ResponseEntity<>(newEmployee,HttpStatus.CREATED);
 }
-@PutMapping("/api/v1/update")
-public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
-    Employee newEmployee=employeeService.updateEmployee(employee);
-    return new ResponseEntity<>(newEmployee,HttpStatus.OK);
+@PutMapping("/api/v1/update/{id}")
+public ResponseEntity<Employee> updateEmployee(
+        @PathVariable("id") Long id,
+        @RequestBody Employee employee) {
+    
+    employee.setId(id); // importante
+    Employee updatedEmployee = employeeService.updateEmployee(employee);
+    return new ResponseEntity<>(updatedEmployee, HttpStatus.OK);
 }
 @DeleteMapping("/api/v1/delete/{id}")
 public ResponseEntity <?> deleteEmployeeById(@PathVariable("id")Long id){
