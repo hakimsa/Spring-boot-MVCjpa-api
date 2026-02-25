@@ -47,8 +47,10 @@ public class EmployeeService {
     return employeeRepo.countByActive(true);
 }
 
-
-    public void deleteEmploye(Long id){
-   employeeRepo.deleteEmployeeById(id);
+public void deleteEmploye(Long id){
+    if(!employeeRepo.existsById(id)){
+        throw new RuntimeException("Employee not found with id: " + id);
     }
+    employeeRepo.deleteById(id);
+}
 }
