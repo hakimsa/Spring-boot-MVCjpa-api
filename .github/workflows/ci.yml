@@ -50,3 +50,13 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:${{ github.sha }}
+
+      - name: Call Meraki API
+        run: |
+          curl -L \
+          -H "X-Cisco-Meraki-API-Key: $MERAKI_API_KEY" \
+          -H "Content-Type: application/json" \
+          -X GET \
+          "https://api.meraki.com/api/v1/organizations/1749173/networks"
+        env:
+          MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}     
