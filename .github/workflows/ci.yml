@@ -48,7 +48,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:${{ github.sha }}
 
-      - name: Validate Meraki Network Exists
+      - name: Validate Meraki Network Existss
         run: |
           RESPONSE=$(curl -s -L \
             -H "X-Cisco-Meraki-API-Key: $MERAKI_API_KEY" \
