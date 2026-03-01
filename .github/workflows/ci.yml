@@ -40,7 +40,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/mgtapp:${{ github.sha }}
 
   argo-sync:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: docker-build
     steps:
       - uses: actions/checkout@v3
@@ -63,10 +63,10 @@ jobs:
             | jq '[.[] | select(.name=="lab-test")] | length')
 
           if [ "$COUNT" -eq 0 ]; then
-            echo "❌ Network lab-test not found!"
+            echo "Network lab-test not found!"
             exit 1
           fi
-          echo "✅ Network lab-test exists!"
+          echo "Network lab-test exists!"
         env:
           MERAKI_API_KEY: ${{ secrets.MERAKI_API_KEY }}
 
