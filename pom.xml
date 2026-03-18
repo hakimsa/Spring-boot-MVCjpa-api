@@ -37,6 +37,7 @@
   <version>4.0.0</version>
 </dependency>
 
+
     <!-- Micrometer Prometheus (si quieres exportar a Prometheus/Grafana) -->
     <dependency>
         <groupId>io.micrometer</groupId>

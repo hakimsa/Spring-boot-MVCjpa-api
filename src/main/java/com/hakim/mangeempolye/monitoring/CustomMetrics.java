@@ -11,33 +11,41 @@ import io.micrometer.core.instrument.Timer;
 
 @Component
 public class CustomMetrics {
-    
-    private final Counter employeeCreatedCounter;
-    private final Timer employeeResponseTime;
+
+    private final MeterRegistry meterRegistry; // 👈 AQUÍ
 
     public CustomMetrics(MeterRegistry meterRegistry, EmployeeService employeeService) {
-        this.employeeCreatedCounter = Counter.builder("employees.created.count")
-            .description("Total employees created")
-            .register(meterRegistry);
-            
-        this.employeeResponseTime = Timer.builder("employees.response.time")
-            .description("Employee API response time")
-            .register(meterRegistry);
-            
-        Gauge.builder("employees.active.count", employeeService, EmployeeService::getActiveEmployeeCount)
-            .description("Current active employees")
-            .register(meterRegistry);
+        this.meterRegistry = meterRegistry; // 👈 GUARDARLO
+
+        Timer.builder("employees_response_time_seconds")
+                .description("Employee API response time")
+                .publishPercentiles(0.5, 0.95, 0.99)
+                .publishPercentileHistogram()
+                .register(meterRegistry);
+
+        Gauge.builder("employees_active", employeeService, EmployeeService::getActiveEmployeeCount)
+                .description("Current active employees")
+                .register(meterRegistry);
     }
+
     
-    public void incrementEmployeeCreated() {
-        employeeCreatedCounter.increment();
+    public void incrementEmployeeCreated(String status) {
+        Counter.builder("employees_created_total")
+                .tag("status", status)
+                .register(meterRegistry)
+                .increment();
     }
-    
-    public Timer.Sample startTimer(MeterRegistry meterRegistry) {
+
+    public Timer.Sample startTimer() {
         return Timer.start(meterRegistry);
     }
-    
-    public void stopTimer(Timer.Sample sample) {
-        sample.stop(employeeResponseTime);
+
+    public void stopTimer(Timer.Sample sample, String endpoint, String status) {
+        sample.stop(
+            Timer.builder("employees_response_time_seconds")
+                    .tag("endpoint", endpoint)
+                    .tag("status", status)
+                    .register(meterRegistry)
+        );
     }
 }

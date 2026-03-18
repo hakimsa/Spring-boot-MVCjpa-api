@@ -19,6 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/employee/api/v1/add").permitAll()
             .antMatchers("/employee/api/v1/all").permitAll()
             .antMatchers("/employee/api/v1/find/**").permitAll()
+            .antMatchers("/employee/api/v1/delete/**").permitAll()
             // Actuator endpoints
             .antMatchers("/actuator/health").permitAll()
             .antMatchers("/actuator/prometheus").permitAll() // ← importante para Prometheus

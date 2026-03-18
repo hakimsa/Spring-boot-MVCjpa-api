@@ -12,8 +12,5 @@ public class MangeEmpolyeApplication {
         SpringApplication.run(MangeEmpolyeApplication.class, args);
     }
 
-    // Este método se ejecutará después de que la aplicación haya arrancado
-    
-    
 }
 

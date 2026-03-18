@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: employee-api-monitor
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: spring-mvc-api
+  endpoints:
+    - port: metrics        # 👈 debe coincidir con Service
+      path: /actuator/prometheus
+      interval: 15s
