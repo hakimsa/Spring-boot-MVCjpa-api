@@ -65,7 +65,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/api-server :latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/api-server:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/api-server:${{ github.sha }}
 
 
