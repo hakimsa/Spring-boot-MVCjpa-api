@@ -16,11 +16,20 @@ spec:
       - name: spring-mvc-api
         image: hakimsamouh/mgtapp:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8087
         env:
         - name: DB_URL
-          value: jdbc:postgresql://192.168.0.19:5432/em_db
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: DB_URL
         - name: DB_USER
-          value: hakim
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: DB_USER
         - name: DB_PASSWORD
-          value: zoro123
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: DB_PASSWORD

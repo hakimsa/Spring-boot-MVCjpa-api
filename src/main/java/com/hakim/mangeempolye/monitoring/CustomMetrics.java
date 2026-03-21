@@ -12,10 +12,9 @@ import io.micrometer.core.instrument.Timer;
 @Component
 public class CustomMetrics {
 
-    private final MeterRegistry meterRegistry; // 👈 AQUÍ
-
+    private final MeterRegistry meterRegistry; 
     public CustomMetrics(MeterRegistry meterRegistry, EmployeeService employeeService) {
-        this.meterRegistry = meterRegistry; // 👈 GUARDARLO
+        this.meterRegistry = meterRegistry; 
 
         Timer.builder("employees_response_time_seconds")
                 .description("Employee API response time")

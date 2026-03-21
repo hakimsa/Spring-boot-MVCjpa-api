@@ -11,28 +11,24 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class EmployeeService {
+
     private final EmployeeRepo employeeRepo;
 
-@Autowired
     public EmployeeService(EmployeeRepo employeeRepo) {
         this.employeeRepo = employeeRepo;
     }
 
-
     public Employee addEmployee(Employee employee){
-
         return employeeRepo.save(employee);
     }
+
     public Employee updateEmployee(Employee employee){
-
         return employeeRepo.save(employee);
     }
-    public List<Employee>findallEmployees(){
 
+    public List<Employee> findallEmployees(){
         return employeeRepo.findAll();
     }
-
-
 
     public Employee findEmployeeById(Long id) {
         return employeeRepo.findById(id)
@@ -41,16 +37,14 @@ public class EmployeeService {
                 ));
     }
 
-
-
     public double getActiveEmployeeCount() {
-    return employeeRepo.countByActive(true);
-}
+        return employeeRepo.countByActive(true);
+    }
 
     public void deleteEmploye(Long id){
-    if(!employeeRepo.existsById(id)){
-        throw new RuntimeException("Employee not found with id: " + id);
-    }
-    employeeRepo.deleteById(id);
+        if(!employeeRepo.existsById(id)){
+            throw new RuntimeException("Employee not found with id: " + id);
+        }
+        employeeRepo.deleteById(id);
     }
 }

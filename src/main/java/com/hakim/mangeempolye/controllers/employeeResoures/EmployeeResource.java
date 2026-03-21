@@ -29,7 +29,7 @@ public class EmployeeResource {
    
     public EmployeeResource(EmployeeService employeeService, CustomMetrics metrics) {
         this.employeeService = employeeService;
-        this.metrics = null;
+        this.metrics = metrics;
     }
 @GetMapping("/api/v1/all")
 public ResponseEntity <List<Employee>> getAllEmployees(){
