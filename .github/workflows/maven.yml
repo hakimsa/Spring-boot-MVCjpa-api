@@ -60,14 +60,19 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/api-server:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/api-server:${{ github.sha }}
+        run: |
+          TAG=$(echo $GITHUB_SHA | cut -c1-7)
+          VERSION="1.0.3"  # Opcional: extrae desde pubspec.yaml
 
+          if [ "${GITHUB_REF##*/}" == "main" ]; then
+            IMAGE_TAG=prod-$VERSION-$TAG
+          else
+            IMAGE_TAG=develop-$VERSION-$TAG
+          fi
+
+          echo "Building Docker image: hakimsamouh/api-server:$IMAGE_TAG"
+          docker build -t hakimsamouh/api-server:$IMAGE_TAG .
+          docker push hakimsamouh/api-server:$IMAGE_TAG
 
   # ----------------------------
   # 3️⃣ UPDATE MANIFEST (GitOps)
