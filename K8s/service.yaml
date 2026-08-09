@@ -9,9 +9,9 @@ spec:
   selector:
     app: spring-mvc-api
   ports:
-    - name: http                   # API normal
+    - name: http
       port: 8080
       targetPort: 8080
-    - name: metrics                # 👈 Debe coincidir con ServiceMonitor
+    - name: metrics                #coincidir con ServiceMonitor
       port: 8087
       targetPort: 8087

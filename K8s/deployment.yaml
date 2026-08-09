@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: spring-mvc-api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: spring-mvc-api
@@ -13,23 +13,38 @@ spec:
         app: spring-mvc-api
     spec:
       containers:
-      - name: spring-mvc-api
-        image: hakimsamouh/mgtapp:latest
-        ports:
-        - containerPort: 8087
-        env:
-        - name: DB_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: DB_URL
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: DB_USER
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-credentials
-              key: DB_PASSWORD
+        - name: spring-mvc-api
+          image: hakimsamouh/mgtapp:latest
+          ports:
+            - containerPort: 8086
+          # application.properties montado como archivo
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config/application.properties
+              subPath: application.properties
+          # Credenciales desde Secret
+          env:
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: spring-mvc-api-secret
+                  key: db-url
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spring-mvc-api-secret
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-mvc-api-secret
+                  key: db-password
+            - name: SECURITY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-mvc-api-secret
+                  key: security-password
+      volumes:
+        - name: config-volume
+          configMap:
+            name: spring-mvc-api-config

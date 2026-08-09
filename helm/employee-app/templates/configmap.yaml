@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-dev3-config
+data:
+  application.properties: |
+    server.port=8086

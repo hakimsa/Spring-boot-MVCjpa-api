@@ -1,59 +1,18 @@
-# helm/employee-app/values.yaml
-replicaCount: 2
+replicaCount: 1
 
 image:
-  repository: ghcr.io/your-org/employee-app
-  pullPolicy: IfNotPresent
-  tag: ""
-
-nameOverride: ""
-fullnameOverride: ""
+  repository: hakimsamouh/mgtapp
+  tag: latest
 
 service:
-  type: ClusterIP
-  port: 8080
+  port: 8086
 
-ingress:
-  enabled: true
-  className: "nginx"
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    nginx.ingress.kubernetes.io/rate-limit: "100"
-  hosts:
-    - host: employee-app.yourdomain.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: employee-app-tls
-      hosts:
-        - employee-app.yourdomain.com
+config:
+  applicationProperties: |
+    server.port=8086
 
-resources:
-  limits:
-    cpu: 500m
-    memory: 512Mi
-  requests:
-    cpu: 250m
-    memory: 256Mi
-
-autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
-mysql:
-  enabled: true
-  auth:
-    rootPassword: "secure-root-password"
-    database: "employeedb"
-    username: "employeeuser"
-    password: "secure-password"
-  persistence:
-    enabled: true
-    size: 8Gi
+secret:
+  dbUrl: jdbc:mysql://172.17.0.3:33060/dbs
+  dbUser: hakim
+  dbPassword: zoro123
+  securityPassword: HSrd82AB**

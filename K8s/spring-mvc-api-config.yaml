@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-mvc-api-config
+  namespace: development
+  labels:
+    app: spring-mvc-api
+data:
+  application.properties: |
+    # Puerto de la aplicación
+    server.port=8086
+
+    # Usuario de Spring Security
+    spring.security.user.name=webprod
+    spring.security.user.password=${SECURITY_PASSWORD}
+
+    # Exponer endpoints de actuator
+    management.endpoints.web.exposure.include=*
+    management.endpoint.prometheus.enabled=true
+    management.metrics.export.prometheus.enabled=true
+
+    # Histogramas para http requests
+    management.metrics.distribution.percentiles-histogram.http.server.requests=true
+    management.metrics.distribution.percentiles.http.server.requests=0.5,0.95,0.99
+
+    # Health checks (Kubernetes)
+    management.endpoint.health.probes.enabled=true
+    management.endpoint.health.show-details=always
+
+    # Información de la aplicación
+    info.app.name=Spring Boot Employee API
+    info.app.version=1.0.0
+
+    # PostgreSQL
+    spring.datasource.url=${DB_URL}
+    spring.datasource.username=${DB_USER}
+    spring.datasource.password=${DB_PASSWORD}
+
+    # Hibernate
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.format_sql=true
+
+    # Tracing / OpenTelemetry
+    management.tracing.sampling.probability=1.0
+    otel.service.name=employee-management-app
+    otel.exporter.otlp.endpoint=http://otel-collector:4317
