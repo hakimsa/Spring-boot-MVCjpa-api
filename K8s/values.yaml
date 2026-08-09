@@ -1,4 +1,4 @@
 image:
   repository: hakimsamouh/mgtapp
-  tag: "latest"
+  tag: "931d1ad319db9655d4ba61ca82150cc76d0435be"
   pullPolicy: IfNotPresent
